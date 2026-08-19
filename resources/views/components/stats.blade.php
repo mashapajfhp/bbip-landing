@@ -1,32 +1,35 @@
-<section id="stats" class="py-20 md:py-32 bg-navy text-white">
+<section id="how" class="relative z-1 py-20 md:py-28">
     <div class="container">
-        <div class="text-center mb-16">
-            <h2 class="text-3xl sm:text-4xl font-bold mb-4">Proven Results</h2>
-            <p class="text-lg text-blue-200 max-w-2xl mx-auto">
-                Join thousands of students achieving their goals with BBIP coaching.
-            </p>
-        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-9 bg-gradient-to-r from-blue-800 to-blue-600 rounded-3xl p-8 md:p-10 text-white shadow-2xl shadow-blue-500/20">
+            <!-- Stat 1 -->
+            <div class="flex gap-4 items-start">
+                <div class="w-14 h-14 rounded-full bg-white flex items-center justify-center text-blue-600 text-2xl font-bold flex-shrink-0 shadow-md">⌂</div>
+                <div>
+                    <strong class="text-4xl md:text-5xl block leading-tight">4</strong>
+                    <b class="text-lg font-bold block mb-2">Coaching Pathways</b>
+                    <span class="text-blue-100 text-sm">Designed for every learner's unique journey.</span>
+                </div>
+            </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <x-stat-card
-                number="50,000+"
-                label="Active Students"
-            />
+            <!-- Stat 2 -->
+            <div class="flex gap-4 items-start">
+                <div class="w-14 h-14 rounded-full bg-white flex items-center justify-center text-blue-600 text-2xl font-bold flex-shrink-0 shadow-md">◉</div>
+                <div>
+                    <strong class="text-4xl md:text-5xl block leading-tight">1</strong>
+                    <b class="text-lg font-bold block mb-2">Connected Journey</b>
+                    <span class="text-blue-100 text-sm">Personalized support from start to success.</span>
+                </div>
+            </div>
 
-            <x-stat-card
-                number="500+"
-                label="Partner Schools"
-            />
-
-            <x-stat-card
-                number="95%"
-                label="Success Rate"
-            />
-
-            <x-stat-card
-                number="4.9/5"
-                label="Average Rating"
-            />
+            <!-- Stat 3 -->
+            <div class="flex gap-4 items-start">
+                <div class="w-14 h-14 rounded-full bg-white flex items-center justify-center text-blue-600 text-2xl font-bold flex-shrink-0 shadow-md">◆</div>
+                <div>
+                    <strong class="text-4xl md:text-5xl block leading-tight">24/7</strong>
+                    <b class="text-lg font-bold block mb-2">Digital Access</b>
+                    <span class="text-blue-100 text-sm">Learn anytime, anywhere with full support.</span>
+                </div>
+            </div>
         </div>
     </div>
 </section>

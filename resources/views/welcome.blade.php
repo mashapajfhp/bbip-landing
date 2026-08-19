@@ -5,11 +5,9 @@
 
     <main>
         <x-hero />
-        <x-features />
+        <x-programs />
         <x-stats />
-        <x-testimonials />
-        <x-faq />
-        <x-cta />
+        <x-lead-form />
     </main>
 
     <x-footer />
