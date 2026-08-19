@@ -1,0 +1,14 @@
+.git
+.gitignore
+.env.local
+.env.*.local
+.github
+.dockerignore
+docker-compose*.yml
+Dockerfile
+node_modules
+.DS_Store
+*.log
+.vscode
+.idea
+.editorconfig

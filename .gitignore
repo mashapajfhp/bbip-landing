@@ -1,0 +1,17 @@
+/node_modules
+/public/build
+/storage/*.key
+/storage
+/bootstrap/cache
+.env
+.env.local
+.env.*.local
+.DS_Store
+Thumbs.db
+*.log
+vendor/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
