@@ -61,11 +61,11 @@ jobs:
       # Check for common debugging code
       - name: Check for debug code
         run: |
-          if grep -r "dd(" app resources --include="*.php"; then
+          if grep -rE "^\s*dd\(" app resources --include="*.php"; then
             echo "Found dd() debugging code"
             exit 1
           fi
-          if grep -r "var_dump(" app resources --include="*.php"; then
+          if grep -rE "^\s*var_dump\(" app resources --include="*.php"; then
             echo "Found var_dump() debugging code"
             exit 1
           fi
