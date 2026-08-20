@@ -37,6 +37,12 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
+      - name: Setup PHP 8.4
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: curl, json, mbstring
+
       - name: Install PHP dependencies
         run: composer install --no-interaction --prefer-dist --no-progress
 
@@ -69,6 +75,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v5
+
+      - name: Setup PHP 8.4
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: curl, json, mbstring
 
       - name: Install PHP dependencies
         run: composer install --no-interaction --prefer-dist --no-progress
