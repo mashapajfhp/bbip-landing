@@ -8,12 +8,8 @@ services:
     container_name: bbip-landing
     restart: unless-stopped
     working_dir: /var/www/html
+    env_file: ../.env
     environment:
-      APP_NAME: "BBIP Landing"
-      APP_ENV: local
-      APP_KEY: ${APP_KEY:-base64:WYb+qKmUsSMTNGx0lQZUQMl2O0oV/L8NN5240CoHr08=}
-      APP_DEBUG: "true"
-      APP_URL: http://localhost
       CACHE_DRIVER: array
       QUEUE_CONNECTION: sync
     ports:
