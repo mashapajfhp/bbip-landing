@@ -51,7 +51,7 @@ COPY --from=composer-builder /app/vendor ./vendor
 COPY --from=frontend-builder /app/public/build ./public/build
 
 # Create necessary directories and set permissions
-RUN mkdir -p storage storage/logs storage/app storage/framework/cache/data storage/framework/views bootstrap/cache resources/views && \
+RUN mkdir -p storage storage/logs storage/app storage/framework/{cache/data,sessions,views} bootstrap/cache resources/views && \
     chown -R www-data:www-data /var/www/html && \
     chmod -R 775 storage bootstrap/cache || true
 
