@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: bbip_app
+    restart: unless-stopped
+    working_dir: /app
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - GOOGLE_SHEETS_SPREADSHEET_ID=${GOOGLE_SHEETS_SPREADSHEET_ID}
+      - GOOGLE_SHEETS_SHEET_NAME=${GOOGLE_SHEETS_SHEET_NAME:-Leads}
+      - GOOGLE_SERVICE_ACCOUNT_JSON_PATH=/app/storage/app/google/service-account.json
+      - BBIP_WHATSAPP_NUMBER=${BBIP_WHATSAPP_NUMBER}
+    volumes:
+      - ./:/app:delegated
+      - /app/vendor
+      - /app/node_modules
+    ports:
+      - "8001:8000"
+    command: >
+      sh -c "composer update --no-interaction &&
+             php artisan config:clear &&
+             php artisan route:clear &&
+             php artisan cache:clear &&
+             php artisan serve --host=0.0.0.0"
+
+  vite:
+    build:
+      context: .
+      dockerfile: Dockerfile.node
+    container_name: bbip_vite
+    restart: unless-stopped
+    working_dir: /app
+    volumes:
+      - ./:/app:delegated
+      - /app/node_modules
+    ports:
+      - "5180:5173"
+    environment:
+      - VITE_HOST=localhost
+    command: npm run dev
