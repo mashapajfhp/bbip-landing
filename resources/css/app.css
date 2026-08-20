@@ -98,8 +98,7 @@
   }
 
   .insight-head {
-    background: linear-gradient(135deg, #0b47d1, #1d6dff);
-    radial-gradient(circle at 88% 15%, rgba(79, 178, 255, 0.35), transparent 28%);
+    background: linear-gradient(135deg, #0b47d1, #1d6dff), radial-gradient(circle at 88% 15%, rgba(79, 178, 255, 0.35), transparent 28%);
     @apply text-white p-6 flex items-center gap-3.5;
   }
 
