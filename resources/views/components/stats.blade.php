@@ -1,6 +1,6 @@
 <section id="how" class="relative z-1 py-20 md:py-28">
     <div class="container">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-9 bg-gradient-to-r from-blue-800 to-blue-600 rounded-3xl p-8 md:p-10 text-white shadow-2xl shadow-blue-500/20">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-9 rounded-3xl p-8 md:p-10 text-white shadow-2xl" style="background: linear-gradient(135deg, #073dbd, #155ff1);">
             <!-- Stat 1 -->
             <div class="flex gap-4 items-start">
                 <div class="w-14 h-14 rounded-full bg-white flex items-center justify-center text-blue-600 text-2xl font-bold flex-shrink-0 shadow-md">⌂</div>

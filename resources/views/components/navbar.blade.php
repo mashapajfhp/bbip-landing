@@ -1,11 +1,11 @@
 <header class="sticky top-0 z-50 py-3 bg-white/90 backdrop-blur-md border-b border-blue-100 shadow-sm">
     <div class="container">
-        <nav class="flex items-center justify-between gap-5 bg-white/97 border border-gray-200 rounded-3xl p-2.5 shadow-md" x-data="{ open: false }">
+        <nav class="flex items-center justify-between gap-5 bg-white/97 border border-line rounded-3xl p-2.5 shadow-md" x-data="{ open: false }">
             <a href="/" class="flex-shrink-0" aria-label="BBIP Home">
                 <img class="h-12 w-auto" src="{{ asset('logo.png') }}" alt="BBIP logo">
             </a>
 
-            <div class="hidden md:flex items-center gap-7 text-sm font-bold text-gray-600">
+            <div class="hidden md:flex items-center gap-7 text-sm font-bold text-ink">
                 <a href="#how" class="relative py-2 transition-colors hover:text-blue-600 group">
                     How It Works
                     <span class="absolute left-0 right-0 bottom-0 h-0.5 rounded bg-blue-600 transform scale-x-0 group-hover:scale-x-100 transition-transform"></span>

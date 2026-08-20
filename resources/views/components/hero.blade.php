@@ -13,7 +13,7 @@
                     <h1 class="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight tracking-tight text-ink mt-5 mb-6">
                         Learn better, <span class="text-blue-600">think stronger,</span> and become more independent.
                     </h1>
-                    <p class="text-lg text-gray-600 max-w-xl mb-8">
+                    <p class="text-lg text-muted max-w-xl mb-8">
                         BBIP empowers individuals with the coaching, skills and support they need to excel in academic pursuits and in life.
                     </p>
                     <div class="flex flex-col sm:flex-row gap-4 flex-wrap">

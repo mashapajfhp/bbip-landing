@@ -53,15 +53,21 @@
   }
 
   .btn-primary {
-    @apply btn bg-gradient-to-r from-[#0d57ed] to-[#246dff] text-white shadow-lg shadow-blue-500/30 hover:shadow-lg hover:shadow-blue-500/40;
+    background: linear-gradient(135deg, var(--blue), var(--blue2));
+    @apply btn text-white shadow-lg hover:shadow-xl;
+    box-shadow: 0 12px 26px rgba(13, 87, 237, 0.22);
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 14px 30px rgba(13, 87, 237, 0.28);
   }
 
   .btn-light {
-    @apply btn bg-white text-ink border border-blue-200 hover:bg-gray-50;
+    @apply btn bg-white text-ink border border-line hover:bg-soft;
   }
 
   .btn-whatsapp {
-    @apply btn bg-white text-gray-900 border border-emerald-300 hover:bg-gray-50;
+    @apply btn bg-white text-ink border border-emerald-200 hover:bg-soft;
   }
 
   .wa-dot {
@@ -69,11 +75,16 @@
   }
 
   .badge {
-    @apply inline-flex items-center gap-2 text-blue-700 bg-blue-50 border border-blue-300 px-3 py-2 rounded-full text-xs font-black tracking-wider;
+    @apply inline-flex items-center gap-2 px-3 py-2 rounded-full text-xs font-black tracking-wider;
+    color: var(--blue);
+    background: var(--soft);
+    border: 1px solid var(--blue);
+    border-color: #a9c6ff;
   }
 
   .spark {
-    @apply w-5 h-5 rounded bg-blue-100 grid place-items-center;
+    @apply w-5 h-5 rounded grid place-items-center;
+    background: var(--soft);
   }
 
   .card {
@@ -81,7 +92,19 @@
   }
 
   .insight-card {
-    @apply bg-white border border-blue-200 rounded-3xl overflow-hidden shadow-2xl;
+    @apply bg-white rounded-3xl overflow-hidden;
+    border: 1px solid #dce8f8;
+    box-shadow: 0 28px 80px rgba(31, 69, 140, 0.14);
+  }
+
+  .insight-head {
+    background: linear-gradient(135deg, #0b47d1, #1d6dff);
+    radial-gradient(circle at 88% 15%, rgba(79, 178, 255, 0.35), transparent 28%);
+    @apply text-white p-6 flex items-center gap-3.5;
+  }
+
+  .insight-head h3 {
+    @apply font-bold text-2xl m-0;
   }
 
   .section-title {
@@ -90,15 +113,45 @@
 
   .section-title::after {
     content: '';
-    @apply block w-12 h-1 bg-blue-600 rounded mx-auto mt-3.5;
+    @apply block w-12 h-1 rounded mx-auto mt-3.5;
+    background: var(--blue);
   }
 
   .section-badge {
-    @apply block mx-auto mb-3 text-blue-600 border border-blue-300 px-2.5 py-1.5 rounded-full text-xs font-black w-fit;
+    @apply block mx-auto mb-3 px-2.5 py-1.5 rounded-full text-xs font-black w-fit;
+    color: var(--blue);
+    border: 1px solid #bfd3ff;
   }
 
   .btn-link {
-    @apply bg-transparent border-none cursor-pointer;
+    @apply bg-transparent border-none cursor-pointer font-bold;
+  }
+
+  .program-card {
+    @apply bg-white border rounded-2xl p-6 text-center shadow-lg position-relative overflow-hidden min-h-80;
+    border-color: #e1e9f5;
+  }
+
+  .program-card::after {
+    content: '';
+    @apply absolute left-0 right-0 bottom-0 h-1;
+    background: var(--blue);
+  }
+
+  .program-card.academic::after {
+    background: var(--green);
+  }
+
+  .program-card.remedial::after {
+    background: var(--red);
+  }
+
+  .program-card.empowerment::after {
+    background: var(--blue);
+  }
+
+  .program-card.leadership::after {
+    background: var(--yellow);
   }
 }
 
