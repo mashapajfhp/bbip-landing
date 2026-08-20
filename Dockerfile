@@ -53,7 +53,7 @@ COPY --from=frontend-builder /app/public/build ./public/build
 # Create necessary directories and set permissions
 RUN mkdir -p storage storage/logs storage/app storage/framework/cache/data storage/framework/views bootstrap/cache && \
     chown -R www-data:www-data /var/www/html && \
-    chmod -R 775 storage bootstrap/cache
+    chmod -R 775 storage bootstrap/cache || true
 
 # Copy Nginx configuration
 COPY docker/nginx/default.conf /etc/nginx/http.d/default.conf
