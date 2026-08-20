@@ -133,11 +133,11 @@ jobs:
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_bbipsystem
+          chmod 600 ~/.ssh/deploy_bbipsystem
           ssh-keyscan -H ${{ secrets.DEPLOY_HOST }} >> ~/.ssh/known_hosts
 
       - name: Trigger deployment
         run: |
-          ssh -i ~/.ssh/id_ed25519 ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} \
+          ssh -i ~/.ssh/deploy_bbipsystem ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} \
             /usr/local/bin/deploy-${{ env.PROJECT_NAME }}.sh
