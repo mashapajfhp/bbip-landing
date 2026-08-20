@@ -1,0 +1,112 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# GitHub Actions deploy workflow
+#
+# Builds and deploys BBIP Landing to the server using a self-hosted runner.
+# The runner executes directly on the deployment server.
+#
+# ── Prerequisites ─────────────────────────────────────────────────────────────
+#   - Run `ansible-playbook playbooks/onboard_docker.yml` to provision project
+#   - Run `ansible-playbook playbooks/setup_github_runner.yml` to install runner
+#   - Runner listens for pushes to main/staging branches
+#
+# ── Required GitHub Actions Secrets (Settings → Secrets → Actions) ───────────
+#   APP_KEY — Laravel application key (from .env file)
+# ─────────────────────────────────────────────────────────────────────────────
+name: Deploy
+
+on:
+  push:
+    branches: [dev]
+
+env:
+  PROJECT_NAME: bbipsystem # ← Change to match your project slug
+
+concurrency:
+  group: dev-deploy
+  cancel-in-progress: true
+
+jobs:
+  # ── 1. Security & Quality ──────────────────────────────────────────────────
+  security:
+    name: Security & quality checks
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install PHP dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      # Checks all composer packages against the PHP Security Advisories DB.
+      # Fails on any package with a known CVE so a vulnerable dep never ships.
+      - name: Audit dependencies for CVEs
+        run: composer audit --no-dev
+
+      # Basic Blade template syntax check
+      - name: Lint Blade templates
+        run: find resources/views -name "*.blade.php" -exec php -l {} \;
+
+      # Check for common debugging code
+      - name: Check for debug code
+        run: |
+          if grep -r "dd(" app resources --include="*.php"; then
+            echo "Found dd() debugging code"
+            exit 1
+          fi
+          if grep -r "var_dump(" app resources --include="*.php"; then
+            echo "Found var_dump() debugging code"
+            exit 1
+          fi
+
+  # ── 2. Test ────────────────────────────────────────────────────────────────
+  test:
+    name: Build & test
+    runs-on: self-hosted
+    needs: security
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install PHP dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Setup Node and build frontend
+        run: |
+          npm ci
+          npm run build
+
+      - name: Verify assets built
+        run: |
+          if [ ! -d "public/build" ]; then
+            echo "Frontend build failed - public/build not found"
+            exit 1
+          fi
+
+  # ── 3. Deploy ──────────────────────────────────────────────────────────────
+  deploy:
+    name: Deploy to production
+    runs-on: self-hosted
+    needs: test
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0 # full history required by Gitleaks
+
+      # Scans commits in this push for secrets: API keys, tokens, connection strings.
+      # Pinned version + handles the first-push edge case (all-zeros before SHA).
+      - name: Scan for leaked secrets (Gitleaks)
+        run: |
+          curl -sSfL https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz \
+            | tar -xz gitleaks
+          BEFORE="${{ github.event.before }}"
+          if [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
+            ./gitleaks detect --source . --redact --log-opts "-1"
+          else
+            ./gitleaks detect --source . --redact --log-opts "$BEFORE..${{ github.sha }}"
+          fi
+
+      - name: Trigger deployment
+        run: |
+          /usr/local/bin/deploy-${{ env.PROJECT_NAME }}.sh

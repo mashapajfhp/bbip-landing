@@ -14,7 +14,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN composer install --no-interaction
+RUN composer update --no-interaction
 
 RUN mkdir -p storage bootstrap/cache && \
     chmod -R 777 storage bootstrap/cache

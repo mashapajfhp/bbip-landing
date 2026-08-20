@@ -16,43 +16,52 @@
             </div>
 
             <div class="card border border-line p-7 shadow-lg">
-                <form id="bbipForm" method="POST" target="hidden_iframe">
+                <form id="bbipForm" method="POST" action="{{ route('leads.store') }}">
+                    @csrf
                     <div class="grid grid-cols-2 gap-4 mb-4">
                         <div>
                             <label for="name" class="text-xs font-black mb-1.5 block">Full name *</label>
-                            <input id="name" type="text" required class="w-full border border-line rounded-2xl px-3.5 py-3 bg-soft outline-none focus:border-blue-600 focus:bg-white focus:ring-1 focus:ring-blue-200 transition-colors">
+                            <input id="name" type="text" name="name" required class="w-full border border-line rounded-2xl px-3.5 py-3 bg-soft outline-none focus:border-blue-600 focus:bg-white focus:ring-1 focus:ring-blue-200 transition-colors" value="{{ old('name') }}">
+                            @error('name')<span class="text-xs text-red-600 mt-1 block">{{ $message }}</span>@enderror
                         </div>
                         <div>
                             <label for="email" class="text-xs font-black mb-1.5 block">Email address *</label>
-                            <input id="email" type="email" required class="w-full border border-line rounded-2xl px-3.5 py-3 bg-soft outline-none focus:border-blue-600 focus:bg-white focus:ring-1 focus:ring-blue-200 transition-colors">
+                            <input id="email" type="email" name="email" required class="w-full border border-line rounded-2xl px-3.5 py-3 bg-soft outline-none focus:border-blue-600 focus:bg-white focus:ring-1 focus:ring-blue-200 transition-colors" value="{{ old('email') }}">
+                            @error('email')<span class="text-xs text-red-600 mt-1 block">{{ $message }}</span>@enderror
                         </div>
                     </div>
 
                     <div class="mb-4">
                         <label for="whatsapp" class="text-xs font-black mb-1.5 block">WhatsApp number *</label>
-                        <input id="whatsapp" type="tel" required placeholder="+27..." class="w-full border border-line rounded-2xl px-3.5 py-3 bg-soft outline-none focus:border-blue-600 focus:bg-white focus:ring-1 focus:ring-blue-200 transition-colors">
+                        <input id="whatsapp" type="tel" name="whatsapp" required placeholder="+27..." class="w-full border border-line rounded-2xl px-3.5 py-3 bg-soft outline-none focus:border-blue-600 focus:bg-white focus:ring-1 focus:ring-blue-200 transition-colors" value="{{ old('whatsapp') }}">
+                        @error('whatsapp')<span class="text-xs text-red-600 mt-1 block">{{ $message }}</span>@enderror
                     </div>
 
                     <div class="mb-4">
                         <label for="challenge" class="text-xs font-black mb-1.5 block">What would you most like BBIP to help with? *</label>
-                        <textarea id="challenge" required class="w-full border border-line rounded-2xl px-3.5 py-3 bg-soft outline-none focus:border-blue-600 focus:bg-white focus:ring-1 focus:ring-blue-200 transition-colors min-h-24 resize-vertical"></textarea>
+                        <textarea id="challenge" name="challenge" required class="w-full border border-line rounded-2xl px-3.5 py-3 bg-soft outline-none focus:border-blue-600 focus:bg-white focus:ring-1 focus:ring-blue-200 transition-colors min-h-24 resize-vertical">{{ old('challenge') }}</textarea>
+                        @error('challenge')<span class="text-xs text-red-600 mt-1 block">{{ $message }}</span>@enderror
                     </div>
 
                     <label class="flex gap-2.5 text-xs text-muted font-medium mb-4">
-                        <input type="checkbox" id="consent" required class="mt-1">
+                        <input type="checkbox" name="consent" id="consent" required class="mt-1" {{ old('consent') ? 'checked' : '' }}>
                         <span>I agree that BBIP may contact me using the details above about coaching programs and onboarding.</span>
                     </label>
+                    @error('consent')<span class="text-xs text-red-600 mt-1 block">{{ $message }}</span>@enderror
 
                     <div class="flex gap-2.5 flex-wrap mb-3">
-                        <button type="submit" class="btn btn-primary text-sm">Submit & Continue</button>
+                        <button type="submit" id="submitBtn" class="btn btn-primary text-sm">
+                            <span id="submitText">Submit & Continue</span>
+                            <span id="submittingText" class="hidden">Submitting...</span>
+                        </button>
                         <button type="button" id="sendWhatsApp" class="btn btn-light text-sm">Send via WhatsApp</button>
                     </div>
 
-                    <div id="statusBox" class="hidden p-3 bg-emerald-50 text-emerald-800 border border-emerald-300 rounded-2xl font-bold text-sm">
+                    <div id="successBox" class="hidden p-3 bg-emerald-50 text-emerald-800 border border-emerald-300 rounded-2xl font-bold text-sm">
                         Thank you. Your enquiry has been submitted. The BBIP team will contact you shortly.
                     </div>
+                    <div id="errorBox" class="hidden p-3 bg-red-50 text-red-800 border border-red-300 rounded-2xl font-bold text-sm"></div>
                 </form>
-                <iframe name="hidden_iframe" style="display:none;"></iframe>
             </div>
         </div>
     </div>
@@ -60,17 +69,11 @@
 
 <script>
     const CONFIG = {
-        WHATSAPP_NUMBER: "REPLACE_WITH_WHATSAPP_NUMBER",
-        GOOGLE_FORM_ID: "REPLACE_WITH_GOOGLE_FORM_ID",
-        GOOGLE_FORM_FIELDS: {
-            name: "entry.REPLACE_NAME",
-            email: "entry.REPLACE_EMAIL",
-            whatsapp: "entry.REPLACE_WHATSAPP",
-            challenge: "entry.REPLACE_CHALLENGE"
-        }
+        WHATSAPP_NUMBER: "{{ env('BBIP_WHATSAPP_NUMBER', '') }}"
     };
 
     function waUrl(message) {
+        if (!CONFIG.WHATSAPP_NUMBER) return "#";
         const n = CONFIG.WHATSAPP_NUMBER.replace(/\D/g, "");
         return `https://wa.me/${n}?text=${encodeURIComponent(message)}`;
     }
@@ -80,7 +83,12 @@
     });
 
     const form = document.getElementById("bbipForm");
-    const statusBox = document.getElementById("statusBox");
+    const submitBtn = document.getElementById("submitBtn");
+    const submitText = document.getElementById("submitText");
+    const submittingText = document.getElementById("submittingText");
+    const successBox = document.getElementById("successBox");
+    const errorBox = document.getElementById("errorBox");
+    let isSubmitting = false;
 
     function getFormValues() {
         return {
@@ -91,29 +99,52 @@
         };
     }
 
-    form.addEventListener("submit", e => {
-        const missing = CONFIG.GOOGLE_FORM_ID.includes("REPLACE_") ||
-            Object.values(CONFIG.GOOGLE_FORM_FIELDS).some(v => v.includes("REPLACE_"));
-        if (missing) {
-            e.preventDefault();
-            alert("Google Form connection is not configured yet. Replace the GOOGLE_FORM_ID and entry IDs in the CONFIG section.");
-            return;
+    form.addEventListener("submit", async e => {
+        e.preventDefault();
+
+        if (isSubmitting) return;
+
+        if (!form.reportValidity()) return;
+
+        isSubmitting = true;
+        submitBtn.disabled = true;
+        submitText.classList.add("hidden");
+        submittingText.classList.remove("hidden");
+        errorBox.classList.add("hidden");
+        successBox.classList.add("hidden");
+
+        try {
+            const formData = new FormData(form);
+            const response = await fetch(form.action, {
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": document.querySelector('input[name="_token"]').value,
+                },
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                successBox.classList.remove("hidden");
+                form.reset();
+                setTimeout(() => {
+                    successBox.classList.add("hidden");
+                }, 5000);
+            } else {
+                errorBox.textContent = data.message || "An error occurred. Please try again.";
+                errorBox.classList.remove("hidden");
+            }
+        } catch (error) {
+            console.error("Submission error:", error);
+            errorBox.textContent = "We couldn't submit your request right now. Please try again.";
+            errorBox.classList.remove("hidden");
+        } finally {
+            isSubmitting = false;
+            submitBtn.disabled = false;
+            submitText.classList.remove("hidden");
+            submittingText.classList.add("hidden");
         }
-
-        const v = getFormValues();
-        form.action = `https://docs.google.com/forms/d/e/${CONFIG.GOOGLE_FORM_ID}/formResponse`;
-        form.querySelectorAll("[data-google-field]").forEach(el => el.remove());
-
-        Object.entries(CONFIG.GOOGLE_FORM_FIELDS).forEach(([key, entryName]) => {
-            const hidden = document.createElement("input");
-            hidden.type = "hidden";
-            hidden.name = entryName;
-            hidden.value = v[key] || "";
-            hidden.setAttribute("data-google-field", "true");
-            form.appendChild(hidden);
-        });
-
-        setTimeout(() => statusBox.classList.remove("hidden"), 650);
     });
 
     document.getElementById("sendWhatsApp").addEventListener("click", () => {
