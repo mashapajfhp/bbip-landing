@@ -16,7 +16,10 @@ name: Deploy
 
 on:
   push:
-    branches: [dev]
+    branches: [dev, main]
+  pull_request:
+    branches: [main]
+    types: [closed]
 
 env:
   PROJECT_NAME: bbipsystem # ← Change to match your project slug
@@ -29,7 +32,7 @@ jobs:
   # ── 1. Security & Quality ──────────────────────────────────────────────────
   security:
     name: Security & quality checks
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v5
@@ -61,7 +64,7 @@ jobs:
   # ── 2. Test ────────────────────────────────────────────────────────────────
   test:
     name: Build & test
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: security
 
     steps:
@@ -85,9 +88,11 @@ jobs:
   # ── 3. Deploy ──────────────────────────────────────────────────────────────
   deploy:
     name: Deploy to production
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: test
-    if: github.ref == 'refs/heads/main'
+    if: |
+      github.event_name == 'push' ||
+      (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
 
     steps:
       - uses: actions/checkout@v5
@@ -107,6 +112,14 @@ jobs:
             ./gitleaks detect --source . --redact --log-opts "$BEFORE..${{ github.sha }}"
           fi
 
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ secrets.DEPLOY_HOST }} >> ~/.ssh/known_hosts
+
       - name: Trigger deployment
         run: |
-          /usr/local/bin/deploy-${{ env.PROJECT_NAME }}.sh
+          ssh -i ~/.ssh/id_ed25519 ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} \
+            /usr/local/bin/deploy-${{ env.PROJECT_NAME }}.sh
