@@ -3,7 +3,7 @@ version: '3.8'
 services:
   app:
     build:
-      context: ./repo
+      context: .
       dockerfile: Dockerfile
 
     image: bbipsystem-app:latest
@@ -20,8 +20,8 @@ services:
       - ../.env
 
     volumes:
-      - ./repo/storage:/var/www/html/storage
-      - ./repo/bootstrap/cache:/var/www/html/bootstrap/cache
+      - ./storage:/var/www/html/storage
+      - ./bootstrap/cache:/var/www/html/bootstrap/cache
 
     networks:
       - bbipsystem-network
