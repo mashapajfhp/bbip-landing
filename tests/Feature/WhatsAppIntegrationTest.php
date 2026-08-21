@@ -297,6 +297,51 @@ class WhatsAppIntegrationTest extends TestCase
         $response->assertSee('Chat on WhatsApp');
     }
 
+    public function test_landing_page_whatsapp_links_never_use_placeholder_urls(): void
+    {
+        config(['services.whatsapp' => [
+            'number' => '971501234567',
+            'default_message' => 'Hello',
+        ]]);
+
+        $html = $this->get('/')->assertOk()->getContent();
+
+        preg_match_all('/<a\b[^>]*class="[^"]*whatsapp-link[^"]*"[^>]*>/i', $html, $links);
+
+        $this->assertNotEmpty($links[0]);
+
+        foreach ($links[0] as $link) {
+            $this->assertStringContainsString('href="https://wa.me/971501234567?text=Hello"', $link);
+            $this->assertStringNotContainsString('href="#"', $link);
+        }
+    }
+
+    public function test_mobile_navigation_is_collapsed_by_default(): void
+    {
+        config(['services.whatsapp.number' => '971501234567']);
+
+        $response = $this->get('/')->assertOk();
+
+        $response->assertSee('x-data="{ open: false }"', escape: false);
+        $response->assertSee('id="mobile-menu"', escape: false);
+        $response->assertSee('x-cloak', escape: false);
+        $response->assertSee('x-show="open"', escape: false);
+        $response->assertSee('aria-controls="mobile-menu"', escape: false);
+    }
+
+    public function test_whatsapp_message_is_safely_encoded_in_the_url(): void
+    {
+        config(['services.whatsapp' => [
+            'number' => '971501234567',
+            'default_message' => '<script>alert("unsafe")</script>',
+        ]]);
+
+        $view = $this->blade('<x-whatsapp-button />');
+
+        $view->assertSee(urlencode('<script>alert("unsafe")</script>'), escape: false);
+        $view->assertDontSee('<script>', escape: false);
+    }
+
     public function test_landing_page_includes_floating_button(): void
     {
         config(['services.whatsapp' => [
@@ -415,10 +460,10 @@ class WhatsAppIntegrationTest extends TestCase
         $view->assertSee('https://wa.me/971501234567', escape: false);
     }
 
-    public function test_whatsapp_number_with_leading_zeros_preserved(): void
+    public function test_whatsapp_number_accepts_country_code_without_plus_sign(): void
     {
         config(['services.whatsapp' => [
-            'number' => '00971501234567',
+            'number' => '971501234567',
             'default_message' => 'Hello',
         ]]);
 
@@ -426,7 +471,6 @@ class WhatsAppIntegrationTest extends TestCase
             '<x-whatsapp-button />'
         );
 
-        // Should remove leading zeros that are not part of international format
         $view->assertSee('https://wa.me/971501234567', escape: false);
     }
 

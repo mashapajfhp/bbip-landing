@@ -58,7 +58,7 @@ class GoogleSheetsService
         $options = ['valueInputOption' => 'RAW'];
 
         try {
-            $this->service->spreadsheets_values->append(
+            $this->appendValues(
                 $spreadsheetId,
                 "'{$sheetName}'!A:F",
                 $values,
@@ -72,5 +72,19 @@ class GoogleSheetsService
 
             throw new \RuntimeException('Failed to append lead to Google Sheets.');
         }
+    }
+
+    protected function appendValues(
+        string $spreadsheetId,
+        string $range,
+        ValueRange $values,
+        array $options
+    ): void {
+        $this->service->spreadsheets_values->append(
+            $spreadsheetId,
+            $range,
+            $values,
+            $options
+        );
     }
 }
