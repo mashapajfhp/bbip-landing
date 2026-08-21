@@ -16,10 +16,10 @@
             <!-- Remedial Academic Coaching -->
             <article class="card border border-line p-6 relative overflow-hidden shadow-md hover:shadow-lg transition-shadow flex flex-col">
                 <div class="absolute bottom-0 left-0 right-0 h-1 bg-red"></div>
-                <div class="w-16 h-16 rounded-full bg-gradient-to-br from-red-400 to-red text-white text-2xl font-black flex items-center justify-center mx-auto mb-4 shadow-md">⌂</div>
+                <div class="w-16 h-16 rounded-full bg-gradient-to-br from-[#ff817d] to-red text-white text-2xl font-black flex items-center justify-center mx-auto mb-4 shadow-md">⌂</div>
                 <h3 class="text-xl font-bold text-center text-ink mb-3">Remedial Academic Coaching</h3>
                 <p class="text-sm text-muted text-center mb-5 flex-1">Targeted support for learners who need help catching up and staying on track.</p>
-                <button class="inline-flex items-center justify-center gap-2 rounded-full border border-red-200 bg-red-50 px-4 py-2 text-red font-bold text-sm mx-auto shadow-sm transition-all hover:bg-red-100 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-red-300 program-btn" data-program="Remedial Academic Coaching">Learn more <span aria-hidden="true">→</span></button>
+                <button class="inline-flex items-center justify-center gap-2 rounded-full border border-[#ffc2bf] bg-[#fff2f1] px-4 py-2 text-red font-bold text-sm mx-auto shadow-sm transition-all hover:bg-[#ffe3e1] hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#ffaaa6] program-btn" data-program="Remedial Academic Coaching">Learn more <span aria-hidden="true">→</span></button>
             </article>
 
             <!-- Self Empowerment -->
