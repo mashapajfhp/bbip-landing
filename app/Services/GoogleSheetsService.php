@@ -58,7 +58,7 @@ class GoogleSheetsService
         try {
             $this->service->spreadsheets_values->append(
                 $spreadsheetId,
-                "{$sheetName}!A1",
+                "'{$sheetName}'!A:F",
                 $values,
                 $options
             );
