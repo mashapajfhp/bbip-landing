@@ -33,7 +33,7 @@ class WhatsAppIntegrationTest extends TestCase
         $response->assertSee('Answer a few questions to help BBIP understand you better.');
         $response->assertSee('id="insights"', escape: false);
         $response->assertSee('href="#insights"', escape: false);
-        $response->assertSee('Insights & Growth');
+        $response->assertSee('Insights & Growth', escape: false);
         $response->assertSee('Understand. Develop. Grow.');
         $response->assertSee('360° Understanding');
         $response->assertSee('Personalised Development');
