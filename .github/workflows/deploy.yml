@@ -42,7 +42,7 @@ jobs:
           extensions: curl, json, mbstring
 
       - name: Create Laravel cache directories
-        run: mkdir -p bootstrap/cache storage/logs
+        run: mkdir -p bootstrap/cache storage/framework/cache/data storage/framework/sessions storage/framework/testing storage/framework/views storage/logs
 
       - name: Install PHP dependencies
         run: composer install --no-interaction --prefer-dist --no-progress
@@ -84,7 +84,7 @@ jobs:
           extensions: curl, json, mbstring
 
       - name: Create Laravel cache directories
-        run: mkdir -p bootstrap/cache storage/logs
+        run: mkdir -p bootstrap/cache storage/framework/cache/data storage/framework/sessions storage/framework/testing storage/framework/views storage/logs
 
       - name: Install PHP dependencies
         run: composer install --no-interaction --prefer-dist --no-progress

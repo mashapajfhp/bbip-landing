@@ -474,14 +474,14 @@ class WhatsAppIntegrationTest extends TestCase
         $view->assertSee('https://wa.me/971501234567', escape: false);
     }
 
-    public function test_environment_variables_loaded_correctly(): void
+    public function test_whatsapp_configuration_values_are_valid(): void
     {
         $number = config('services.whatsapp.number');
         $message = config('services.whatsapp.default_message');
 
-        if (!is_null($number)) {
+        if ($number !== null && $number !== '') {
             $this->assertIsString($number);
-            $this->assertTrue(strlen($number) >= 10);
+            $this->assertMatchesRegularExpression('/^\d{10,15}$/', $number);
         }
 
         $this->assertIsString($message);
