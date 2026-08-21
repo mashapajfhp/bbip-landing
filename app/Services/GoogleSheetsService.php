@@ -53,7 +53,9 @@ class GoogleSheetsService
             ],
         ]);
 
-        $options = ['valueInputOption' => 'USER_ENTERED'];
+        // Store submitted values literally so phone numbers beginning with "+"
+        // are not parsed by Google Sheets as formulas.
+        $options = ['valueInputOption' => 'RAW'];
 
         try {
             $this->service->spreadsheets_values->append(
