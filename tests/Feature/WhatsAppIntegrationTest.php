@@ -26,6 +26,14 @@ class WhatsAppIntegrationTest extends TestCase
         $response->assertSee('Start your peak performance journey.');
         $response->assertSee('Quick onboarding');
         $response->assertSee('Personalised pathway');
+        $response->assertSee('data-international-phone', escape: false);
+        $response->assertSee('autocomplete="tel"', escape: false);
+        $response->assertSee('placeholder="Enter your full name"', escape: false);
+        $response->assertSee('placeholder="you@example.com"', escape: false);
+        $response->assertSee('placeholder="Enter your phone number"', escape: false);
+        $response->assertSee('placeholder="Tell us what you would like to improve or get support with"', escape: false);
+        $response->assertSee('id="successBox" role="status"', escape: false);
+        $response->assertSee('id="errorBox" role="alert"', escape: false);
         $response->assertSee('bg-amber-400', escape: false);
         $response->assertSee('program-btn', escape: false);
         $response->assertDontSee('Discover the right program for your child');

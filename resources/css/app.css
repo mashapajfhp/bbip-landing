@@ -6,6 +6,20 @@
   display: none !important;
 }
 
+.iti {
+  width: 100%;
+}
+
+.iti__search-input {
+  @apply py-2 outline-none focus:ring-1 focus:ring-inset focus:ring-blue-200;
+  padding-left: calc(var(--iti-spacer-horizontal) + var(--iti-globe-icon-size) + var(--iti-spacer-horizontal));
+  padding-right: calc(var(--iti-spacer-horizontal) + var(--iti-clear-icon-size) + var(--iti-spacer-horizontal));
+}
+
+.iti__dropdown-content {
+  max-width: calc(100vw - 2rem);
+}
+
 @layer base {
   :root {
     --navy: #071a45;

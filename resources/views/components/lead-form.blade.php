@@ -43,25 +43,25 @@
                     <div class="grid grid-cols-2 gap-4 mb-4">
                         <div>
                             <label for="name" class="text-xs font-black mb-1.5 block">Full name *</label>
-                            <input id="name" type="text" name="name" required class="w-full border border-line rounded-2xl px-3.5 py-3 bg-soft outline-none focus:border-blue-600 focus:bg-white focus:ring-1 focus:ring-blue-200 transition-colors" value="{{ old('name') }}">
+                            <input id="name" type="text" name="name" required placeholder="Enter your full name" class="w-full border border-line rounded-2xl px-3.5 py-3 bg-soft outline-none focus:border-blue-600 focus:bg-white focus:ring-1 focus:ring-blue-200 transition-colors" value="{{ old('name') }}">
                             @error('name')<span class="text-xs text-red-600 mt-1 block">{{ $message }}</span>@enderror
                         </div>
                         <div>
                             <label for="email" class="text-xs font-black mb-1.5 block">Email address *</label>
-                            <input id="email" type="email" name="email" required class="w-full border border-line rounded-2xl px-3.5 py-3 bg-soft outline-none focus:border-blue-600 focus:bg-white focus:ring-1 focus:ring-blue-200 transition-colors" value="{{ old('email') }}">
+                            <input id="email" type="email" name="email" required placeholder="you@example.com" class="w-full border border-line rounded-2xl px-3.5 py-3 bg-soft outline-none focus:border-blue-600 focus:bg-white focus:ring-1 focus:ring-blue-200 transition-colors" value="{{ old('email') }}">
                             @error('email')<span class="text-xs text-red-600 mt-1 block">{{ $message }}</span>@enderror
                         </div>
                     </div>
 
                     <div class="mb-4">
                         <label for="whatsapp" class="text-xs font-black mb-1.5 block">WhatsApp number *</label>
-                        <input id="whatsapp" type="tel" name="whatsapp" required placeholder="+27..." class="w-full border border-line rounded-2xl px-3.5 py-3 bg-soft outline-none focus:border-blue-600 focus:bg-white focus:ring-1 focus:ring-blue-200 transition-colors" value="{{ old('whatsapp') }}">
+                        <input id="whatsapp" data-international-phone type="tel" inputmode="tel" autocomplete="tel" name="whatsapp" required placeholder="Enter your phone number" class="w-full border border-line rounded-2xl px-3.5 py-3 bg-soft outline-none focus:border-blue-600 focus:bg-white focus:ring-1 focus:ring-blue-200 transition-colors" value="{{ old('whatsapp') }}">
                         @error('whatsapp')<span class="text-xs text-red-600 mt-1 block">{{ $message }}</span>@enderror
                     </div>
 
                     <div class="mb-4">
                         <label for="challenge" class="text-xs font-black mb-1.5 block">What would you most like BBIP to help with? *</label>
-                        <textarea id="challenge" name="challenge" required class="w-full border border-line rounded-2xl px-3.5 py-3 bg-soft outline-none focus:border-blue-600 focus:bg-white focus:ring-1 focus:ring-blue-200 transition-colors min-h-24 resize-vertical">{{ old('challenge') }}</textarea>
+                        <textarea id="challenge" name="challenge" required placeholder="Tell us what you would like to improve or get support with" class="w-full border border-line rounded-2xl px-3.5 py-3 bg-soft outline-none focus:border-blue-600 focus:bg-white focus:ring-1 focus:ring-blue-200 transition-colors min-h-24 resize-vertical">{{ old('challenge') }}</textarea>
                         @error('challenge')<span class="text-xs text-red-600 mt-1 block">{{ $message }}</span>@enderror
                     </div>
 
@@ -81,10 +81,10 @@
                         @endif
                     </div>
 
-                    <div id="successBox" class="hidden p-3 bg-emerald-50 text-emerald-800 border border-emerald-300 rounded-2xl font-bold text-sm">
+                    <div id="successBox" role="status" aria-live="polite" class="hidden p-3 bg-emerald-50 text-emerald-800 border border-emerald-300 rounded-2xl font-bold text-sm">
                         Thank you. Your enquiry has been submitted. The BBIP team will contact you shortly.
                     </div>
-                    <div id="errorBox" class="hidden p-3 bg-red-50 text-red-800 border border-red-300 rounded-2xl font-bold text-sm"></div>
+                    <div id="errorBox" role="alert" aria-live="assertive" class="hidden p-3 bg-red-50 text-red-800 border border-red-300 rounded-2xl font-bold text-sm"></div>
                 </form>
             </div>
         </div>
@@ -111,11 +111,22 @@
     const errorBox = document.getElementById("errorBox");
     let isSubmitting = false;
 
+    function getWhatsAppNumber() {
+        const countryCode = window.whatsappPhoneInput?.getSelectedCountryData().dialCode || "27";
+        const localNumber = document.getElementById("whatsapp").value.trim();
+        const digits = localNumber.replace(/\D/g, "").replace(/^0+/, "");
+
+        if (!digits) return "";
+        if (digits.startsWith(countryCode)) return `+${digits}`;
+
+        return `+${countryCode}${digits}`;
+    }
+
     function getFormValues() {
         return {
             name: document.getElementById("name").value.trim(),
             email: document.getElementById("email").value.trim(),
-            whatsapp: document.getElementById("whatsapp").value.trim(),
+            whatsapp: getWhatsAppNumber(),
             challenge: document.getElementById("challenge").value.trim()
         };
     }
@@ -136,6 +147,7 @@
 
         try {
             const formData = new FormData(form);
+            formData.set("whatsapp", getWhatsAppNumber());
             const response = await fetch(form.action, {
                 method: "POST",
                 headers: {
