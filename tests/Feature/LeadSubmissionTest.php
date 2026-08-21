@@ -3,9 +3,7 @@
 namespace Tests\Feature;
 
 use App\Services\GoogleSheetsService;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\Fluent\AssertableJson;
-use Mockery\MockInterface;
 use Tests\TestCase;
 
 class LeadSubmissionTest extends TestCase
@@ -13,9 +11,10 @@ class LeadSubmissionTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->mock(GoogleSheetsService::class, function (MockInterface $mock) {
-            $mock->shouldReceive('appendLead')->andReturn(null);
-        });
+
+        $mock = $this->createMock(GoogleSheetsService::class);
+        $mock->method('appendLead');
+        $this->app->instance(GoogleSheetsService::class, $mock);
     }
 
     public function test_can_submit_valid_lead(): void
@@ -75,14 +74,14 @@ class LeadSubmissionTest extends TestCase
 
     public function test_trims_whitespace(): void
     {
-        $this->mock(GoogleSheetsService::class, function (MockInterface $mock) {
-            $mock->shouldReceive('appendLead')
-                ->once()
-                ->with(\Mockery::on(function ($data) {
-                    return $data['name'] === 'Ahmed Mohamed'
-                        && $data['email'] === 'ahmed@example.com';
-                }));
-        });
+        $mock = $this->createMock(GoogleSheetsService::class);
+        $mock->expects($this->once())
+            ->method('appendLead')
+            ->with($this->callback(function (array $data): bool {
+                return $data['name'] === 'Ahmed Mohamed'
+                    && $data['email'] === 'ahmed@example.com';
+            }));
+        $this->app->instance(GoogleSheetsService::class, $mock);
 
         $this->post(route('leads.store'), [
             'name' => '  Ahmed Mohamed  ',
@@ -95,11 +94,11 @@ class LeadSubmissionTest extends TestCase
 
     public function test_handles_google_sheets_failure(): void
     {
-        $this->mock(GoogleSheetsService::class, function (MockInterface $mock) {
-            $mock->shouldReceive('appendLead')
-                ->once()
-                ->andThrow(new \RuntimeException('Failed to append lead to Google Sheets.'));
-        });
+        $mock = $this->createMock(GoogleSheetsService::class);
+        $mock->expects($this->once())
+            ->method('appendLead')
+            ->willThrowException(new \RuntimeException('Failed to append lead to Google Sheets.'));
+        $this->app->instance(GoogleSheetsService::class, $mock);
 
         $response = $this->post(route('leads.store'), [
             'name' => 'Ahmed Mohamed',

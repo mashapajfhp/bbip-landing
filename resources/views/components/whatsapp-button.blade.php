@@ -26,5 +26,5 @@
    data-cta="whatsapp"
    aria-label="Chat with us on WhatsApp">
     <span class="wa-dot">◔</span>
-    {{ $slot ?? 'Chat on WhatsApp' }}
+    {{ $slot->isEmpty() ? 'Chat on WhatsApp' : $slot }}
 </a>
