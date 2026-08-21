@@ -21,6 +21,7 @@ services:
 
     volumes:
       - ./storage:/var/www/html/storage
+      - ../google-serviceaccount.json:/var/www/html/storage/app/google/service-account.json
       - ./bootstrap/cache:/var/www/html/bootstrap/cache
 
     networks:
