@@ -20,5 +20,7 @@
 </head>
 <body class="antialiased">
     @yield('content')
+
+    <x-floating-whatsapp />
 </body>
 </html>

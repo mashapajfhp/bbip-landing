@@ -41,4 +41,9 @@ return [
         'sheet_name' => env('GOOGLE_SHEETS_SHEET_NAME', 'Sheet1'),
     ],
 
+    'whatsapp' => [
+        'number' => env('WHATSAPP_NUMBER'),
+        'default_message' => env('WHATSAPP_DEFAULT_MESSAGE', 'Hello, I would like to know more.'),
+    ],
+
 ];

@@ -69,7 +69,7 @@
 
 <script>
     const CONFIG = {
-        WHATSAPP_NUMBER: "{{ env('BBIP_WHATSAPP_NUMBER', '') }}"
+        WHATSAPP_NUMBER: "{{ config('services.whatsapp.number', '') }}"
     };
 
     function waUrl(message) {
@@ -79,7 +79,9 @@
     }
 
     document.querySelectorAll(".whatsapp-link").forEach(a => {
-        a.href = waUrl("Hello BBIP, I would like to know more about your coaching programs and platform.");
+        if (!a.href || a.href === '#') {
+            a.href = waUrl("{{ config('services.whatsapp.default_message') }}");
+        }
     });
 
     const form = document.getElementById("bbipForm");
