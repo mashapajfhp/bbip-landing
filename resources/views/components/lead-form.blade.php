@@ -6,11 +6,35 @@
                     <span class="spark">✦</span>
                     START YOUR JOURNEY
                 </span>
-                <h2 class="text-4xl md:text-5xl font-bold text-ink mt-3.5 mb-3">Tell us what you need.</h2>
+                <h2 class="text-4xl md:text-5xl font-bold text-ink mt-3.5 mb-3">Start your peak performance journey.</h2>
                 <p class="text-lg text-muted max-w-md mb-8">
-                    Complete this short form and the BBIP team will contact you on WhatsApp to guide you through the most suitable program and onboarding.
+                    Tell us what you want to improve and the BBIP team will guide you to the right diagnostic, coaching or development pathway.
                 </p>
                 <x-whatsapp-button variant="whatsapp" location="lead-form">Prefer WhatsApp? Chat now</x-whatsapp-button>
+
+                <div class="grid sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3 gap-4 mt-8">
+                    <div class="flex gap-3 items-start">
+                        <span class="w-9 h-9 rounded-full bg-blue-100 text-blue-600 font-black grid place-items-center flex-shrink-0">↗</span>
+                        <div>
+                            <strong class="block text-sm text-ink">Quick onboarding</strong>
+                            <span class="block text-xs text-muted mt-1">Simple and easy to get started.</span>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 items-start">
+                        <span class="w-9 h-9 rounded-full bg-purple-100 text-purple-600 font-black grid place-items-center flex-shrink-0">◎</span>
+                        <div>
+                            <strong class="block text-sm text-ink">Personalised pathway</strong>
+                            <span class="block text-xs text-muted mt-1">A development journey shaped around your needs.</span>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 items-start">
+                        <span class="w-9 h-9 rounded-full bg-emerald-100 text-emerald-600 font-black grid place-items-center flex-shrink-0">◷</span>
+                        <div>
+                            <strong class="block text-sm text-ink">24/7 on-demand access</strong>
+                            <span class="block text-xs text-muted mt-1">Access your profile, activities and progress anytime, anywhere.</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="card border border-line p-7 shadow-lg">
