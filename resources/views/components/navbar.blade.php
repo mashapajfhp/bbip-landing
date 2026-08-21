@@ -6,8 +6,8 @@
             </a>
 
             <div class="hidden md:flex items-center gap-7 text-sm font-bold text-ink">
-                <a href="#how" class="relative py-2 transition-colors hover:text-blue-600 group">
-                    How It Works
+                <a href="#insights" class="relative py-2 transition-colors hover:text-blue-600 group">
+                    Insights & Growth
                     <span class="absolute left-0 right-0 bottom-0 h-0.5 rounded bg-blue-600 transform scale-x-0 group-hover:scale-x-100 transition-transform"></span>
                 </a>
                 <a href="#lead-form" class="relative py-2 transition-colors hover:text-blue-600 group">
@@ -45,7 +45,7 @@
 
         <!-- Mobile Menu -->
         <div id="mobile-menu" x-cloak x-show="open" @click.outside="open = false" class="md:hidden mt-4 space-y-3 pb-4 px-4">
-            <a href="#how" @click="open = false" class="block px-4 py-2.5 rounded-lg hover:bg-blue-50 text-gray-700 font-medium transition-colors">How It Works</a>
+            <a href="#insights" @click="open = false" class="block px-4 py-2.5 rounded-lg hover:bg-blue-50 text-gray-700 font-medium transition-colors">Insights & Growth</a>
             <a href="#lead-form" @click="open = false" class="block px-4 py-2.5 rounded-lg hover:bg-blue-50 text-gray-700 font-medium transition-colors">For Parents</a>
             <a href="#about" @click="open = false" class="block px-4 py-2.5 rounded-lg hover:bg-blue-50 text-gray-700 font-medium transition-colors">About BBIP</a>
             <a href="#lead-form" @click="open = false" class="block px-4 py-2.5 rounded-lg hover:bg-blue-50 text-gray-700 font-medium transition-colors">Contact</a>
