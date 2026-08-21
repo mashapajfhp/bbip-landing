@@ -3,23 +3,36 @@ version: '3.8'
 services:
   app:
     build:
-      context: .
+      context: ./repo
       dockerfile: Dockerfile
-    container_name: bbip-landing
+
+    image: bbipsystem-app:latest
+    container_name: bbipsystem_app
+
     restart: unless-stopped
+
     working_dir: /var/www/html
-    env_file: ../.env
-    environment:
-      CACHE_DRIVER: array
-      QUEUE_CONNECTION: sync
+
     ports:
-      - "8088:80"
+      - "127.0.0.1:8088:80"
+
+    env_file:
+      - .env
+
     volumes:
-      - ./storage:/var/www/html/storage
-      - ./bootstrap/cache:/var/www/html/bootstrap/cache
+      - ./repo/storage:/var/www/html/storage
+      - ./repo/bootstrap/cache:/var/www/html/bootstrap/cache
+
     networks:
-      - bbip-network
+      - bbipsystem-network
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
 networks:
-  bbip-network:
+  bbipsystem-network:
     driver: bridge
