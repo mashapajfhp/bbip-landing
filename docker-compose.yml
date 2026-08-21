@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   app:
     build:
@@ -14,7 +12,7 @@ services:
       - GOOGLE_SHEETS_SPREADSHEET_ID=${GOOGLE_SHEETS_SPREADSHEET_ID}
       - GOOGLE_SHEETS_SHEET_NAME=${GOOGLE_SHEETS_SHEET_NAME:-Leads}
       - GOOGLE_SERVICE_ACCOUNT_JSON_PATH=/app/storage/app/google/service-account.json
-      - BBIP_WHATSAPP_NUMBER=${BBIP_WHATSAPP_NUMBER}
+      - WHATSAPP_NUMBER=${WHATSAPP_NUMBER}
     volumes:
       - ./:/app:delegated
       - /app/vendor
@@ -22,7 +20,7 @@ services:
     ports:
       - "8001:8000"
     command: >
-      sh -c "composer update --no-interaction &&
+      sh -c "composer install --no-interaction --prefer-dist &&
              php artisan config:clear &&
              php artisan route:clear &&
              php artisan cache:clear &&
@@ -39,7 +37,7 @@ services:
       - ./:/app:delegated
       - /app/node_modules
     ports:
-      - "5180:5173"
+      - "5173:5173"
     environment:
       - VITE_HOST=localhost
     command: npm run dev

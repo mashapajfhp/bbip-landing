@@ -26,6 +26,8 @@ class WhatsAppIntegrationTest extends TestCase
         $response->assertSee('Start your peak performance journey.');
         $response->assertSee('Quick onboarding');
         $response->assertSee('Personalised pathway');
+        $response->assertSee('bg-amber-400', escape: false);
+        $response->assertSee('program-btn', escape: false);
         $response->assertDontSee('Discover the right program for your child');
         $response->assertDontSee('Tell us what you need.');
     }
@@ -430,7 +432,7 @@ class WhatsAppIntegrationTest extends TestCase
         );
 
         $view->assertSee('<svg', escape: false);
-        $view->assertSee('viewBox="0 0 24 24"', escape: false);
+        $view->assertSee('viewBox="0 0 16 16"', escape: false);
     }
 
     public function test_whatsapp_button_z_index_does_not_block_content(): void
