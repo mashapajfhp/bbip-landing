@@ -53,12 +53,14 @@ class GoogleSheetsService
             ],
         ]);
 
-        $options = ['valueInputOption' => 'USER_ENTERED'];
+        // Store submitted values literally so phone numbers beginning with "+"
+        // are not parsed by Google Sheets as formulas.
+        $options = ['valueInputOption' => 'RAW'];
 
         try {
-            $this->service->spreadsheets_values->append(
+            $this->appendValues(
                 $spreadsheetId,
-                "{$sheetName}!A:F",
+                "'{$sheetName}'!A:F",
                 $values,
                 $options
             );
@@ -70,5 +72,19 @@ class GoogleSheetsService
 
             throw new \RuntimeException('Failed to append lead to Google Sheets.');
         }
+    }
+
+    protected function appendValues(
+        string $spreadsheetId,
+        string $range,
+        ValueRange $values,
+        array $options
+    ): void {
+        $this->service->spreadsheets_values->append(
+            $spreadsheetId,
+            $range,
+            $values,
+            $options
+        );
     }
 }

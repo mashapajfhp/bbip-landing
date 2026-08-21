@@ -10,9 +10,7 @@
                 <p class="text-lg text-muted max-w-md mb-8">
                     Complete this short form and the BBIP team will contact you on WhatsApp to guide you through the most suitable program and onboarding.
                 </p>
-                <a href="#" class="btn btn-whatsapp whatsapp-link">
-                    <span class="wa-dot">◔</span> Prefer WhatsApp? Chat now
-                </a>
+                <x-whatsapp-button variant="whatsapp" location="lead-form">Prefer WhatsApp? Chat now</x-whatsapp-button>
             </div>
 
             <div class="card border border-line p-7 shadow-lg">
@@ -54,7 +52,9 @@
                             <span id="submitText">Submit & Continue</span>
                             <span id="submittingText" class="hidden">Submitting...</span>
                         </button>
-                        <button type="button" id="sendWhatsApp" class="btn btn-light text-sm">Send via WhatsApp</button>
+                        @if(config('services.whatsapp.number'))
+                            <button type="button" id="sendWhatsApp" class="btn btn-light text-sm">Send via WhatsApp</button>
+                        @endif
                     </div>
 
                     <div id="successBox" class="hidden p-3 bg-emerald-50 text-emerald-800 border border-emerald-300 rounded-2xl font-bold text-sm">
@@ -68,19 +68,16 @@
 </section>
 
 <script>
+    @if(config('services.whatsapp.number'))
     const CONFIG = {
-        WHATSAPP_NUMBER: "{{ env('BBIP_WHATSAPP_NUMBER', '') }}"
+        WHATSAPP_NUMBER: @json(config('services.whatsapp.number'))
     };
 
     function waUrl(message) {
-        if (!CONFIG.WHATSAPP_NUMBER) return "#";
         const n = CONFIG.WHATSAPP_NUMBER.replace(/\D/g, "");
         return `https://wa.me/${n}?text=${encodeURIComponent(message)}`;
     }
-
-    document.querySelectorAll(".whatsapp-link").forEach(a => {
-        a.href = waUrl("Hello BBIP, I would like to know more about your coaching programs and platform.");
-    });
+    @endif
 
     const form = document.getElementById("bbipForm");
     const submitBtn = document.getElementById("submitBtn");
@@ -119,6 +116,7 @@
                 method: "POST",
                 headers: {
                     "X-CSRF-TOKEN": document.querySelector('input[name="_token"]').value,
+                    "Accept": "application/json",
                 },
                 body: formData
             });
@@ -147,6 +145,7 @@
         }
     });
 
+    @if(config('services.whatsapp.number'))
     document.getElementById("sendWhatsApp").addEventListener("click", () => {
         if (!form.reportValidity()) return;
         const v = getFormValues();
@@ -160,4 +159,5 @@ What I need help with:
 ${v.challenge}`;
         window.open(waUrl(msg), "_blank", "noopener");
     });
+    @endif
 </script>

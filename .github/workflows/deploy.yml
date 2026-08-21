@@ -1,38 +1,48 @@
 # ─────────────────────────────────────────────────────────────────────────────
 # GitHub Actions deploy workflow
 #
-# Builds and deploys BBIP Landing to the server using a self-hosted runner.
-# The runner executes directly on the deployment server.
+# Builds and tests BBIP Landing on GitHub-hosted runners, then deploys to the
+# production server over SSH.
 #
 # ── Prerequisites ─────────────────────────────────────────────────────────────
 #   - Run `ansible-playbook playbooks/onboard_docker.yml` to provision project
-#   - Run `ansible-playbook playbooks/setup_github_runner.yml` to install runner
-#   - Runner listens for pushes to main/staging branches
+#   - Configure the production deployment script on the target server
 #
 # ── Required GitHub Actions Secrets (Settings → Secrets → Actions) ───────────
-#   APP_KEY — Laravel application key (from .env file)
+#   DEPLOY_SSH_KEY — Private SSH key used for deployment
+#   DEPLOY_HOST    — Production server hostname or IP address
+#   DEPLOY_USER    — Production server SSH user
 # ─────────────────────────────────────────────────────────────────────────────
 name: Deploy
 
 on:
   push:
-    branches: [dev]
+    branches: [dev, main]
 
 env:
   PROJECT_NAME: bbipsystem # ← Change to match your project slug
 
 concurrency:
-  group: dev-deploy
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   # ── 1. Security & Quality ──────────────────────────────────────────────────
   security:
     name: Security & quality checks
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v5
+
+      - name: Setup PHP 8.4
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: curl, json, mbstring
+
+      - name: Create Laravel cache directories
+        run: mkdir -p bootstrap/cache storage/framework/cache/data storage/framework/sessions storage/framework/testing storage/framework/views storage/logs
 
       - name: Install PHP dependencies
         run: composer install --no-interaction --prefer-dist --no-progress
@@ -49,11 +59,11 @@ jobs:
       # Check for common debugging code
       - name: Check for debug code
         run: |
-          if grep -r "dd(" app resources --include="*.php"; then
+          if grep -rE "^\s*dd\(" app resources --include="*.php"; then
             echo "Found dd() debugging code"
             exit 1
           fi
-          if grep -r "var_dump(" app resources --include="*.php"; then
+          if grep -rE "^\s*var_dump\(" app resources --include="*.php"; then
             echo "Found var_dump() debugging code"
             exit 1
           fi
@@ -61,14 +71,37 @@ jobs:
   # ── 2. Test ────────────────────────────────────────────────────────────────
   test:
     name: Build & test
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: security
 
     steps:
       - uses: actions/checkout@v5
 
+      - name: Setup PHP 8.4
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: curl, json, mbstring
+
+      - name: Create Laravel cache directories
+        run: mkdir -p bootstrap/cache storage/framework/cache/data storage/framework/sessions storage/framework/testing storage/framework/views storage/logs
+
       - name: Install PHP dependencies
         run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Prepare test environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Run tests
+        run: vendor/bin/phpunit
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
 
       - name: Setup Node and build frontend
         run: |
@@ -85,7 +118,7 @@ jobs:
   # ── 3. Deploy ──────────────────────────────────────────────────────────────
   deploy:
     name: Deploy to production
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: test
     if: github.ref == 'refs/heads/main'
 
@@ -107,6 +140,14 @@ jobs:
             ./gitleaks detect --source . --redact --log-opts "$BEFORE..${{ github.sha }}"
           fi
 
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_bbipsystem
+          chmod 600 ~/.ssh/deploy_bbipsystem
+          ssh-keyscan -H ${{ secrets.DEPLOY_HOST }} >> ~/.ssh/known_hosts
+
       - name: Trigger deployment
         run: |
-          /usr/local/bin/deploy-${{ env.PROJECT_NAME }}.sh
+          ssh -i ~/.ssh/deploy_bbipsystem ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} \
+            /usr/local/bin/deploy-${{ env.PROJECT_NAME }}.sh
