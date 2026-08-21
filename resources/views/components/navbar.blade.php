@@ -25,9 +25,7 @@
             </div>
 
             <div class="hidden md:flex items-center gap-2">
-                <a href="#" class="btn btn-whatsapp text-xs hidden md:inline-flex whatsapp-link">
-                    <span class="wa-dot">◔</span> Chat on WhatsApp
-                </a>
+                <x-whatsapp-button variant="whatsapp" location="navbar">Chat on WhatsApp</x-whatsapp-button>
                 <a href="#lead-form" class="btn btn-primary text-xs">Get Started</a>
             </div>
 
@@ -52,9 +50,7 @@
             <a href="#about" @click="open = false" class="block px-4 py-2.5 rounded-lg hover:bg-blue-50 text-gray-700 font-medium transition-colors">About BBIP</a>
             <a href="#lead-form" @click="open = false" class="block px-4 py-2.5 rounded-lg hover:bg-blue-50 text-gray-700 font-medium transition-colors">Contact</a>
             <div class="flex flex-col gap-3 pt-3 border-t border-gray-200">
-                <a href="#" class="btn btn-whatsapp text-xs w-full justify-center whatsapp-link">
-                    <span class="wa-dot">◔</span> Chat on WhatsApp
-                </a>
+                <x-whatsapp-button variant="whatsapp" location="mobile-menu">Chat on WhatsApp</x-whatsapp-button>
                 <a href="#lead-form" class="btn btn-primary text-xs w-full justify-center">Get Started</a>
             </div>
         </div>

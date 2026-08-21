@@ -20,9 +20,7 @@
                         <a href="#programs" class="btn btn-primary">
                             Explore Programs <span>→</span>
                         </a>
-                        <a href="#" class="btn btn-light whatsapp-link">
-                            <span class="wa-dot">◔</span> Chat on WhatsApp
-                        </a>
+                        <x-whatsapp-button variant="light" location="hero">Chat on WhatsApp</x-whatsapp-button>
                     </div>
                 </div>
 

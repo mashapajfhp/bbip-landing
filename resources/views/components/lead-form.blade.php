@@ -10,9 +10,7 @@
                 <p class="text-lg text-muted max-w-md mb-8">
                     Complete this short form and the BBIP team will contact you on WhatsApp to guide you through the most suitable program and onboarding.
                 </p>
-                <a href="#" class="btn btn-whatsapp whatsapp-link">
-                    <span class="wa-dot">◔</span> Prefer WhatsApp? Chat now
-                </a>
+                <x-whatsapp-button variant="whatsapp" location="lead-form">Prefer WhatsApp? Chat now</x-whatsapp-button>
             </div>
 
             <div class="card border border-line p-7 shadow-lg">
@@ -54,7 +52,9 @@
                             <span id="submitText">Submit & Continue</span>
                             <span id="submittingText" class="hidden">Submitting...</span>
                         </button>
-                        <button type="button" id="sendWhatsApp" class="btn btn-light text-sm">Send via WhatsApp</button>
+                        @if(config('services.whatsapp.number'))
+                            <button type="button" id="sendWhatsApp" class="btn btn-light text-sm">Send via WhatsApp</button>
+                        @endif
                     </div>
 
                     <div id="successBox" class="hidden p-3 bg-emerald-50 text-emerald-800 border border-emerald-300 rounded-2xl font-bold text-sm">
@@ -77,12 +77,6 @@
         const n = CONFIG.WHATSAPP_NUMBER.replace(/\D/g, "");
         return `https://wa.me/${n}?text=${encodeURIComponent(message)}`;
     }
-
-    document.querySelectorAll(".whatsapp-link").forEach(a => {
-        if (!a.href || a.href === '#') {
-            a.href = waUrl("{{ config('services.whatsapp.default_message') }}");
-        }
-    });
 
     const form = document.getElementById("bbipForm");
     const submitBtn = document.getElementById("submitBtn");
@@ -149,7 +143,7 @@
         }
     });
 
-    document.getElementById("sendWhatsApp").addEventListener("click", () => {
+    document.getElementById("sendWhatsApp")?.addEventListener("click", () => {
         if (!form.reportValidity()) return;
         const v = getFormValues();
         const msg = `Hello BBIP,
