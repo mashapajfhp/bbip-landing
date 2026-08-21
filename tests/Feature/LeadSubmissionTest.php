@@ -19,7 +19,7 @@ class LeadSubmissionTest extends TestCase
 
     public function test_can_submit_valid_lead(): void
     {
-        $response = $this->post(route('leads.store'), [
+        $response = $this->postJson(route('leads.store'), [
             'name' => 'Ahmed Mohamed',
             'email' => 'ahmed@example.com',
             'whatsapp' => '+971501234567',
@@ -36,7 +36,7 @@ class LeadSubmissionTest extends TestCase
 
     public function test_rejects_invalid_email(): void
     {
-        $response = $this->post(route('leads.store'), [
+        $response = $this->postJson(route('leads.store'), [
             'name' => 'Ahmed Mohamed',
             'email' => 'invalid-email',
             'whatsapp' => '+971501234567',
@@ -50,7 +50,7 @@ class LeadSubmissionTest extends TestCase
 
     public function test_rejects_missing_required_fields(): void
     {
-        $response = $this->post(route('leads.store'), [
+        $response = $this->postJson(route('leads.store'), [
             'name' => 'Ahmed Mohamed',
             'email' => 'ahmed@example.com',
         ]);
@@ -61,7 +61,7 @@ class LeadSubmissionTest extends TestCase
 
     public function test_rejects_missing_consent(): void
     {
-        $response = $this->post(route('leads.store'), [
+        $response = $this->postJson(route('leads.store'), [
             'name' => 'Ahmed Mohamed',
             'email' => 'ahmed@example.com',
             'whatsapp' => '+971501234567',
@@ -83,7 +83,7 @@ class LeadSubmissionTest extends TestCase
             }));
         $this->app->instance(GoogleSheetsService::class, $mock);
 
-        $this->post(route('leads.store'), [
+        $this->postJson(route('leads.store'), [
             'name' => '  Ahmed Mohamed  ',
             'email' => '  ahmed@example.com  ',
             'whatsapp' => '+971501234567',
@@ -100,7 +100,7 @@ class LeadSubmissionTest extends TestCase
             ->willThrowException(new \RuntimeException('Failed to append lead to Google Sheets.'));
         $this->app->instance(GoogleSheetsService::class, $mock);
 
-        $response = $this->post(route('leads.store'), [
+        $response = $this->postJson(route('leads.store'), [
             'name' => 'Ahmed Mohamed',
             'email' => 'ahmed@example.com',
             'whatsapp' => '+971501234567',
@@ -118,7 +118,7 @@ class LeadSubmissionTest extends TestCase
     public function test_respects_rate_limiting(): void
     {
         for ($i = 0; $i < 5; $i++) {
-            $this->post(route('leads.store'), [
+            $this->postJson(route('leads.store'), [
                 'name' => 'Ahmed Mohamed',
                 'email' => "ahmed{$i}@example.com",
                 'whatsapp' => '+971501234567',
@@ -127,7 +127,7 @@ class LeadSubmissionTest extends TestCase
             ])->assertOk();
         }
 
-        $response = $this->post(route('leads.store'), [
+        $response = $this->postJson(route('leads.store'), [
             'name' => 'Ahmed Mohamed',
             'email' => 'ahmed6@example.com',
             'whatsapp' => '+971501234567',

@@ -116,6 +116,7 @@
                 method: "POST",
                 headers: {
                     "X-CSRF-TOKEN": document.querySelector('input[name="_token"]').value,
+                    "Accept": "application/json",
                 },
                 body: formData
             });
