@@ -25,7 +25,11 @@
                 </a>
 
                 <a href="#lead-form" class="group flex items-center gap-4 rounded-3xl border border-line bg-white p-4 sm:p-5 shadow-md transition-all hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-300">
-                    <span class="w-12 h-12 rounded-full bg-yellow-100 text-yellow-700 flex items-center justify-center text-2xl flex-shrink-0" aria-hidden="true">☆</span>
+                    <span class="w-12 h-12 rounded-full bg-yellow-100 text-amber-500 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3.75l2.52 5.1 5.63.82-4.08 3.97.96 5.61L12 16.6l-5.03 2.65.96-5.61-4.08-3.97 5.63-.82L12 3.75z" />
+                        </svg>
+                    </span>
                     <strong class="flex-1 text-base sm:text-lg text-ink leading-snug">Which skills and habits are holding back my performance?</strong>
                     <span class="text-2xl text-ink transition-transform group-hover:translate-x-1" aria-hidden="true">›</span>
                 </a>
@@ -33,7 +37,7 @@
                 <a href="#lead-form" class="group flex items-center gap-4 rounded-3xl border border-line bg-white p-4 sm:p-5 shadow-md transition-all hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-300">
                     <span class="w-12 h-12 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center flex-shrink-0">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19V9m5 10V5m5 14v-7m5 7V3M3 19h18" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19v-4h4v4m2 0v-7h4v7m2 0V9h4v10M3 21h18M5 11l5-5 4 3 6-6m0 0h-4m4 0v4" />
                         </svg>
                     </span>
                     <strong class="flex-1 text-base sm:text-lg text-ink leading-snug">Am I becoming more capable and independent over time?</strong>
@@ -48,15 +52,16 @@
             BBIP turns diagnostic insights into a personalised development journey that helps you improve how you think, learn and perform.
         </p>
 
-        <div class="relative max-w-3xl lg:max-w-none mx-auto">
-            <div class="hidden sm:block lg:hidden absolute left-7 top-8 bottom-8 w-px bg-gradient-to-b from-emerald-300 via-amber-300 to-purple-300" aria-hidden="true"></div>
+        <div class="relative max-w-3xl lg:max-w-none mx-auto pl-7 lg:pl-0">
+            <div class="lg:hidden absolute left-2 top-8 bottom-8 w-px bg-slate-200" aria-hidden="true"></div>
             <div class="hidden lg:block absolute left-[16.66%] right-[16.66%] top-[3.25rem] h-px bg-gradient-to-r from-emerald-300 via-amber-300 to-purple-300" aria-hidden="true"></div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
                 <article class="relative flex lg:flex-col gap-4 sm:gap-6 lg:gap-4 items-start lg:items-center lg:text-center rounded-3xl border border-line bg-white p-5 sm:p-6 shadow-md">
+                    <span class="lg:hidden absolute -left-[1.45rem] top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 border-emerald-400 bg-white z-2" aria-hidden="true"></span>
                     <div class="relative z-1 w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center flex-shrink-0">
                         <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l5 5m-2.5-9a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 11a3 3 0 11-6 0 3 3 0 016 0zM6.5 19a5.5 5.5 0 0111 0M5 7a8 8 0 0113-2l1.5 1.5M19.5 3.5v3h-3M19 17a8 8 0 01-13 2l-1.5-1.5M4.5 20.5v-3h3" />
                         </svg>
                     </div>
                     <div>
@@ -66,9 +71,12 @@
                 </article>
 
                 <article class="relative flex lg:flex-col gap-4 sm:gap-6 lg:gap-4 items-start lg:items-center lg:text-center rounded-3xl border border-line bg-white p-5 sm:p-6 shadow-md">
+                    <span class="lg:hidden absolute -left-[1.45rem] top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 border-amber-400 bg-white z-2" aria-hidden="true"></span>
                     <div class="relative z-1 w-14 h-14 rounded-2xl bg-yellow-100 text-yellow-700 flex items-center justify-center flex-shrink-0">
                         <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V3m0 3a6 6 0 106 6h3m-9-6a6 6 0 016 6m0 0h-4m4 0v-4" />
+                            <circle cx="11" cy="13" r="7" stroke-width="1.8" />
+                            <circle cx="11" cy="13" r="3" stroke-width="1.8" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M13.25 10.75L20 4m0 0v4m0-4h-4" />
                         </svg>
                     </div>
                     <div>
@@ -78,9 +86,10 @@
                 </article>
 
                 <article class="relative flex lg:flex-col gap-4 sm:gap-6 lg:gap-4 items-start lg:items-center lg:text-center rounded-3xl border border-line bg-white p-5 sm:p-6 shadow-md">
+                    <span class="lg:hidden absolute -left-[1.45rem] top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 border-purple-400 bg-white z-2" aria-hidden="true"></span>
                     <div class="relative z-1 w-14 h-14 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center flex-shrink-0">
                         <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19V9m5 10V5m5 14v-7m5 7V3M3 19h18" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 19v-4h4v4m2 0v-7h4v7m2 0V9h4v10M3 21h18M5 11l5-5 4 3 6-6m0 0h-4m4 0v4" />
                         </svg>
                     </div>
                     <div>
