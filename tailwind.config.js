@@ -24,7 +24,15 @@ export default {
           600: '#2fbf70',
         },
         green: '#39c977',
-        red: '#ff5a55',
+        red: {
+          DEFAULT: '#ff5a55',
+          50: '#fff2f1',
+          100: '#ffe3e1',
+          200: '#ffc2bf',
+          300: '#ffaaa6',
+          600: '#dc3f3a',
+          800: '#9f241f',
+        },
         yellow: {
           100: '#fff3d8',
           200: '#fff0c8',
