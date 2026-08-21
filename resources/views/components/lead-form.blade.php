@@ -68,15 +68,16 @@
 </section>
 
 <script>
+    @if(config('services.whatsapp.number'))
     const CONFIG = {
-        WHATSAPP_NUMBER: "{{ config('services.whatsapp.number', '') }}"
+        WHATSAPP_NUMBER: @json(config('services.whatsapp.number'))
     };
 
     function waUrl(message) {
-        if (!CONFIG.WHATSAPP_NUMBER) return "#";
         const n = CONFIG.WHATSAPP_NUMBER.replace(/\D/g, "");
         return `https://wa.me/${n}?text=${encodeURIComponent(message)}`;
     }
+    @endif
 
     const form = document.getElementById("bbipForm");
     const submitBtn = document.getElementById("submitBtn");
@@ -143,7 +144,8 @@
         }
     });
 
-    document.getElementById("sendWhatsApp")?.addEventListener("click", () => {
+    @if(config('services.whatsapp.number'))
+    document.getElementById("sendWhatsApp").addEventListener("click", () => {
         if (!form.reportValidity()) return;
         const v = getFormValues();
         const msg = `Hello BBIP,
@@ -156,4 +158,5 @@ What I need help with:
 ${v.challenge}`;
         window.open(waUrl(msg), "_blank", "noopener");
     });
+    @endif
 </script>
