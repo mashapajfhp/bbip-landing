@@ -13,6 +13,23 @@ class WhatsAppIntegrationTest extends TestCase
         $response->assertOk();
     }
 
+    public function test_landing_page_uses_approved_feedback_copy(): void
+    {
+        $response = $this->get('/')->assertOk();
+
+        $response->assertSee('BBIP helps individuals understand how they think, learn and perform');
+        $response->assertSee('What are my real strengths, gaps and blind spots?');
+        $response->assertSee('Discover the right development pathway');
+        $response->assertSee('360° Capability Profile');
+        $response->assertSee('Personalised Development Pathway');
+        $response->assertSee('24/7 On-Demand Access');
+        $response->assertSee('Start your peak performance journey.');
+        $response->assertSee('Quick onboarding');
+        $response->assertSee('Personalised pathway');
+        $response->assertDontSee('Discover the right program for your child');
+        $response->assertDontSee('Tell us what you need.');
+    }
+
     public function test_whatsapp_configuration_exists(): void
     {
         $config = config('services.whatsapp');

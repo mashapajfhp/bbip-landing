@@ -1,7 +1,7 @@
-<section class="relative z-1 py-20 md:py-24">
+<section id="programs" class="relative z-1 pt-12 pb-20 md:pt-14 md:pb-24">
     <div class="container">
         <span class="section-badge">CHOOSE YOUR PATH</span>
-        <h2 class="section-title">Discover the right program for your child</h2>
+        <h2 class="section-title">Discover the right development pathway</h2>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
             <!-- Academic Coaching -->
