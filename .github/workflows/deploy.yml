@@ -129,18 +129,13 @@ jobs:
       - name: Configure SSH
         env:
           SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
-          KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
         run: |
+          set -euo pipefail
           install -d -m 700 "$HOME/.ssh"
           printf '%s\n' "$SSH_KEY" > "$HOME/.ssh/deploy_key"
-          printf '%s\n' "$KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          ssh-keyscan -H "$DEPLOY_HOST" > "$HOME/.ssh/known_hosts"
           chmod 600 "$HOME/.ssh/deploy_key" "$HOME/.ssh/known_hosts"
-
-          if ! ssh-keygen -F "${{ secrets.DEPLOY_HOST }}" \
-            -f "$HOME/.ssh/known_hosts" >/dev/null; then
-            echo 'DEPLOY_KNOWN_HOSTS does not contain DEPLOY_HOST.' >&2
-            exit 1
-          fi
 
       - name: Deploy image
         env:
