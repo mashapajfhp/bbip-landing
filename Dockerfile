@@ -4,7 +4,7 @@ FROM node:22-alpine AS frontend-builder
 WORKDIR /app
 
 COPY package.json package-lock.json* ./
-RUN npm install
+RUN npm ci
 
 COPY . .
 RUN npm run build
@@ -33,7 +33,6 @@ RUN apk add --no-cache \
     nginx \
     supervisor \
     curl \
-    git \
     && docker-php-ext-install opcache
 
 RUN echo 'opcache.enable=1' > /usr/local/etc/php/conf.d/opcache.ini && \
