@@ -58,6 +58,9 @@ class SecurityHeadersTest extends TestCase
         $response = $this->get('/');
 
         $response->assertOk();
-        $this->assertStringContainsString('text/html', $response->header('Content-Type'));
+        $this->assertStringContainsString(
+            'text/html',
+            (string) $response->headers->get('Content-Type')
+        );
     }
 }
