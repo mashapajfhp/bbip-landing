@@ -2,10 +2,21 @@
 
 namespace Tests\Feature;
 
+use App\Services\GoogleSheetsService;
 use Tests\TestCase;
 
 class SecurityHeadersTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->app->instance(
+            GoogleSheetsService::class,
+            $this->createMock(GoogleSheetsService::class)
+        );
+    }
+
     public function test_landing_page_has_security_headers(): void
     {
         $response = $this->get('/');

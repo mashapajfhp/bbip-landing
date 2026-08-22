@@ -2,10 +2,21 @@
 
 namespace Tests\Feature;
 
+use App\Services\GoogleSheetsService;
 use Tests\TestCase;
 
 class ErrorHandlingTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->app->instance(
+            GoogleSheetsService::class,
+            $this->createMock(GoogleSheetsService::class)
+        );
+    }
+
     public function test_not_found_page_returns_404(): void
     {
         $response = $this->get('/non-existent-page');
@@ -56,6 +67,11 @@ class ErrorHandlingTest extends TestCase
 
     public function test_server_error_includes_error_json_response(): void
     {
+        $service = $this->createMock(GoogleSheetsService::class);
+        $service->method('appendLead')
+            ->willThrowException(new \RuntimeException('Google Sheets unavailable.'));
+        $this->app->instance(GoogleSheetsService::class, $service);
+
         $response = $this->postJson(route('leads.store'), [
             'name' => 'Test User',
             'email' => 'test@example.com',
@@ -64,8 +80,7 @@ class ErrorHandlingTest extends TestCase
             'consent' => '1',
         ]);
 
-        if ($response->getStatusCode() >= 500) {
-            $response->assertJsonStructure(['success', 'message']);
-        }
+        $response->assertServerError()
+            ->assertJsonStructure(['success', 'message']);
     }
 }
