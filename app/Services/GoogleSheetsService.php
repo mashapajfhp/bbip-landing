@@ -1,4 +1,8 @@
 <?php
+/**
+ * @noinspection PhpUndefinedClassInspection
+ * @noinspection PhpUndefinedNamespaceInspection
+ */
 
 namespace App\Services;
 
@@ -9,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 
 class GoogleSheetsService
 {
+    /** @psalm-suppress UndefinedClass */
     private ?Sheets $service = null;
 
     public function __construct()
@@ -24,10 +29,13 @@ class GoogleSheetsService
             throw new \RuntimeException('Google Service Account credentials file not found.');
         }
 
+        /** @psalm-suppress UndefinedClass */
         $client = new Client();
         $client->setAuthConfig($credentialsPath);
+        /** @psalm-suppress UndefinedClass */
         $client->addScope(Sheets::SPREADSHEETS);
 
+        /** @psalm-suppress UndefinedClass */
         $this->service = new Sheets($client);
     }
 
