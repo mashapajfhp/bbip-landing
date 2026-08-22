@@ -106,16 +106,17 @@ jobs:
           set -euo pipefail
           docker push "$IMAGE:$GITHUB_SHA"
 
-          image_ref="$(docker inspect \
+          repo_digest="$(docker inspect \
             --format='{{index .RepoDigests 0}}' \
             "$IMAGE:$GITHUB_SHA")"
+          digest="${repo_digest##*@}"
 
-          if [[ "$image_ref" != *@sha256:* ]]; then
+          if [[ ! "$digest" =~ ^sha256:[a-f0-9]{64}$ ]]; then
             echo "Unable to determine pushed image digest." >&2
             exit 1
           fi
 
-          echo "image_ref=$image_ref" >> "$GITHUB_OUTPUT"
+          echo "image_ref=$IMAGE@$digest" >> "$GITHUB_OUTPUT"
 
   deploy:
     name: Deploy
@@ -134,6 +135,12 @@ jobs:
           printf '%s\n' "$SSH_KEY" > "$HOME/.ssh/deploy_key"
           printf '%s\n' "$KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
           chmod 600 "$HOME/.ssh/deploy_key" "$HOME/.ssh/known_hosts"
+
+          if ! ssh-keygen -F "${{ secrets.DEPLOY_HOST }}" \
+            -f "$HOME/.ssh/known_hosts" >/dev/null; then
+            echo 'DEPLOY_KNOWN_HOSTS does not contain DEPLOY_HOST.' >&2
+            exit 1
+          fi
 
       - name: Deploy image
         env:
