@@ -111,8 +111,22 @@
     const errorBox = document.getElementById("errorBox");
     let isSubmitting = false;
 
+    function getSelectedCountryCode() {
+        const phonePicker = window.whatsappPhoneInput;
+
+        if (typeof phonePicker?.getSelectedCountry === "function") {
+            return phonePicker.getSelectedCountry()?.dialCode || "27";
+        }
+
+        if (typeof phonePicker?.getSelectedCountryData === "function") {
+            return phonePicker.getSelectedCountryData()?.dialCode || "27";
+        }
+
+        return "27";
+    }
+
     function getWhatsAppNumber() {
-        const countryCode = window.whatsappPhoneInput?.getSelectedCountryData().dialCode || "27";
+        const countryCode = getSelectedCountryCode();
         const localNumber = document.getElementById("whatsapp").value.trim();
         const digits = localNumber.replace(/\D/g, "").replace(/^0+/, "");
 

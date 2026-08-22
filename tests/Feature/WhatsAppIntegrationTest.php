@@ -53,6 +53,15 @@ class WhatsAppIntegrationTest extends TestCase
         $response->assertDontSee('Tell us what you need.');
     }
 
+    public function test_phone_picker_uses_the_current_country_selection_api(): void
+    {
+        $leadForm = file_get_contents(resource_path('views/components/lead-form.blade.php'));
+
+        $this->assertStringContainsString('typeof phonePicker?.getSelectedCountry === "function"', $leadForm);
+        $this->assertStringContainsString('phonePicker.getSelectedCountry()?.dialCode', $leadForm);
+        $this->assertStringContainsString('typeof phonePicker?.getSelectedCountryData === "function"', $leadForm);
+    }
+
     public function test_whatsapp_configuration_exists(): void
     {
         $config = config('services.whatsapp');
